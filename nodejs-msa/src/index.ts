@@ -21,8 +21,8 @@ app.use('/todos', todoRoutes);
 
 // Express error handler
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+    console.error(err);
+    res.status(500).json('Internal server error');
 });
 
 // Start express server
