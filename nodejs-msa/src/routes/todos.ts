@@ -1,7 +1,7 @@
 import Router from 'express-promise-router';
-import {deleteItem, getItem, getItems, putItem} from "../lib/db";
-import {v4 as uuid, validate} from "uuid";
-import {validateCompletedProperty, validateTitleProperty} from "../util";
+import { deleteItem, getItem, getItems, putItem } from '../lib/db';
+import { v4 as uuid, validate } from 'uuid';
+import { validateCompletedProperty, validateTitleProperty } from '../util';
 
 const todoRouter = Router();
 
@@ -13,28 +13,28 @@ todoRouter.get('/', async (req, res) => {
 
 // POST /todos
 todoRouter.post('/', async (req, res) => {
-    const {title} = req.body;
+    const { title } = req.body;
 
     validateTitleProperty(title);
 
     try {
-        const result = await putItem({id: uuid(), title, completed: false});
+        const result = await putItem({ id: uuid(), title, completed: false });
         res.status(201).send(result);
     } catch (error) {
         if (error instanceof Error) {
-            if (error.message === "Item not found") {
-                res.status(404).send({message: error.message});
+            if (error.message === 'Item not found') {
+                res.status(404).send({ message: error.message });
             }
-            res.status(400).send({message: error.message});
+            res.status(400).send({ message: error.message });
         }
     }
 });
 
 // PATCH /todos/:id/toggle
 todoRouter.patch('/:id/toggle', async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     if (!validate(id)) {
-        res.status(400).send({message: "Incorrect item id."});
+        res.status(400).send({ message: 'Incorrect item id.' });
     }
 
     const { completed } = req.body;
@@ -47,10 +47,10 @@ todoRouter.patch('/:id/toggle', async (req, res) => {
         res.send(result);
     } catch (error) {
         if (error instanceof Error) {
-            if (error.message === "Item not found") {
-                res.status(404).send({message: error.message});
+            if (error.message === 'Item not found') {
+                res.status(404).send({ message: error.message });
             }
-            res.status(400).send({message: error.message});
+            res.status(400).send({ message: error.message });
         }
     }
 });
@@ -58,18 +58,18 @@ todoRouter.patch('/:id/toggle', async (req, res) => {
 // DELETE /todos/:id
 todoRouter.delete('/:id', async (req, res) => {
     try {
-        const id = req.params.id
+        const id = req.params.id;
 
         if (!validate(id)) {
-            res.status(400).send({message: "Incorrect item id."})
+            res.status(400).send({ message: 'Incorrect item id.' });
         }
 
         await deleteItem(id);
-        res.send({"message": `Deleted todo item with id ${id}`});
+        res.send({ message: `Deleted todo item with id ${id}` });
     } catch (error) {
         if (error instanceof Error) {
             res.status(404);
-            res.send({message: error.message});
+            res.send({ message: error.message });
         }
     }
 });
