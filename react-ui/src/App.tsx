@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import TodoList from './components/TodoList';
-import AddItemForm from './components/AddItemForm';
+import AddItem from './components/AddItem';
 import { useEffect, useRef, useState } from 'react';
 import { Todo } from './types/Todo';
 import useFetchItems from './hooks/useFetchItems';
@@ -56,7 +56,7 @@ const App = () => {
             <div>
                 <h1>Add a new Todo</h1>
                 {addTodoError && <div>Something went wrong while adding a new todo item.</div>}
-                <AddItemForm titleRef={titleRef} handleAddTodo={addTodo} />
+                <AddItem titleRef={titleRef} handleAddTodo={addTodo} />
             </div>
         </AppContainer>
     );

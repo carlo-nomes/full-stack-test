@@ -4,6 +4,7 @@ import { useState } from 'react';
 const ItemContainer = styled.li`
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     padding: 0.5rem;
 `;
 
