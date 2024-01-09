@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { List } from './styled/list';
 import { Todo } from '../types';
 import TodoItem from './todo-item';
 

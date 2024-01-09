@@ -11,6 +11,7 @@ export default function AddTodoForm() {
             title: todoTitle,
             completed: false,
         };
+        console.log(todo);
     };
 
     return (
