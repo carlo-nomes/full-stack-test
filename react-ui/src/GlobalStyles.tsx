@@ -383,11 +383,15 @@ export const GlobalStyles = createGlobalStyle`
     nav,
     section {
         display: block;
+
+    }
+    
+    * {
+        box-sizing: border-box;
     }
 
-    body {
+    html, body {
         line-height: 1;
-        box-sizing: border-box;
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 400;
