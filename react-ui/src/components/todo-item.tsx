@@ -1,10 +1,11 @@
 import { Todo, UpdateTodo } from '../types';
 import { useEffect, useRef, useState } from 'react';
-import { Input } from './styled/input';
 import { Button } from './styled/button';
-import { getPatchTodoUrl, getToggleTodoUrl } from '../utils';
 import styled from 'styled-components';
 import { Flex } from './styled/flex';
+import { patchTodo, toggleTodoCompleted, queryClient, todosQueryKey } from '../api/todos';
+import { useMutation } from '@tanstack/react-query';
+import { Input } from './styled/input';
 
 const SaveEditedTodoButton = styled(Button)`
     position: absolute;
@@ -54,31 +55,35 @@ export default function TodoItem(props: Todo) {
         event.stopPropagation();
     }
 
+    const patchTodoMutation = useMutation({
+        mutationFn: patchTodo,
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+            setIsInEditMode(false);
+        },
+    });
+
     async function updateTodo(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const todo: UpdateTodo = {
+        const updatedTodo: Todo = {
+            id,
             title: newTitle,
             completed,
         };
 
-        await fetch(getPatchTodoUrl(id), {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(todo),
-        });
-        setIsInEditMode(false);
+        await patchTodoMutation.mutateAsync(updatedTodo);
     }
 
+    const toggleTodoMutation = useMutation({
+        mutationFn: toggleTodoCompleted,
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+        },
+    });
+
     async function markTodoAsCompleted() {
-        await fetch(getToggleTodoUrl(id), {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        await toggleTodoMutation.mutateAsync(id);
     }
 
     return isInEditMode ? (

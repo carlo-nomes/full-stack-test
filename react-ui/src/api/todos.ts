@@ -1,4 +1,4 @@
-import { baseTodosUrlString } from '../utils';
+import { baseTodosUrlString, getPatchTodoUrl, getToggleTodoUrl } from '../utils';
 import { NewTodo, Todo } from '../types';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -16,6 +16,22 @@ export async function addTodo({ title }: NewTodo): Promise<Todo> {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title }),
+    });
+    return response.json();
+}
+
+export async function patchTodo({ id, title, completed }: Todo): Promise<Todo> {
+    const response = await fetch(getPatchTodoUrl(id), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, completed }),
+    });
+    return response.json();
+}
+
+export async function toggleTodoCompleted(id: string) {
+    const response = await fetch(getToggleTodoUrl(id), {
+        method: 'PATCH',
     });
     return response.json();
 }
