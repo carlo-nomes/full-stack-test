@@ -1,7 +1,7 @@
 import { H1 } from '../components/styled/heading';
 import { Flex } from '../components/styled/flex';
 import AddTodoForm from '../components/add-todo-form';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import Loading from '../components/styled/loading';
 import UncompletedTodos from '../components/uncompleted-todos';
 import CompletedTodos from '../components/completed-todos';
