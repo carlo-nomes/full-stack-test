@@ -1,16 +1,13 @@
-import AddTodoForm from './components/add-todo-form';
-import { MainContainer } from './components/styled/container';
-import TodosList from './components/todos-list';
-import { List } from './components/styled/list';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Todos from './pages';
+
+const queryClient = new QueryClient();
 
 const App = () => {
     return (
-        <MainContainer>
-            <List>
-                <AddTodoForm />
-                <TodosList />
-            </List>
-        </MainContainer>
+        <QueryClientProvider client={queryClient}>
+            <Todos />
+        </QueryClientProvider>
     );
 };
 
