@@ -1,17 +1,21 @@
 import { ReactElement } from 'react';
 import { Todo } from '../types';
 import TodoItem from './todo-item';
+import Loading from './loading';
 import { List, ListItem } from './styled/list';
 
 interface UncompletedTodosProps {
-    uncompletedTodos: Todo[] | undefined;
+    todos: Todo[] | undefined;
+    loading: boolean;
 }
 
-export default function UncompletedTodos({ uncompletedTodos }: UncompletedTodosProps): ReactElement {
-    return (
+export default function TodosList({ todos, loading }: UncompletedTodosProps): ReactElement {
+    return loading ? (
+        <Loading />
+    ) : (
         <List>
-            {uncompletedTodos &&
-                uncompletedTodos.map(({ id, title, completed }) => (
+            {todos &&
+                todos.map(({ id, title, completed }) => (
                     <ListItem key={id}>
                         <TodoItem id={id} title={title} completed={completed} />
                     </ListItem>

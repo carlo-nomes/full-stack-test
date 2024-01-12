@@ -1,17 +1,11 @@
-import { Todo, UpdateTodo } from '../types';
+import { Todo } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './styled/button';
 import styled from 'styled-components';
 import { Flex } from './styled/flex';
-import { patchTodo, toggleTodoCompleted, queryClient, todosQueryKey } from '../api/todos';
-import { useMutation } from '@tanstack/react-query';
+import { updateTodo, toggleTodoCompleted, queryClient, todosQueryKey, deleteTodo } from '../api/todos';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { Input } from './styled/input';
-
-const SaveEditedTodoButton = styled(Button)`
-    position: absolute;
-    right: 0.65rem;
-    top: 0.65rem;
-`;
 
 export const ToggleEditTodoButton = styled(Button)`
     cursor: url('/edit.svg'), pointer;
@@ -24,18 +18,16 @@ const RelativeContainer = styled.div`
     position: relative;
 `;
 
-const ManipulateTodoContainer = styled(Flex)`
+const AbsoluteButtonContainer = styled(Flex)`
     position: absolute;
     right: 0.65rem;
     top: 0.65rem;
 `;
 
-export default function TodoItem(props: Todo) {
-    const { id, title, completed } = props;
-
-    const [newTitle, setNewTitle] = useState(title);
+export default function TodoItem({ completed, id, title }: Todo) {
     const [isInEditMode, setIsInEditMode] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const [newTitle, setNewTitle] = useState(title);
 
     useEffect(() => {
         if (isInEditMode) {
@@ -47,23 +39,24 @@ export default function TodoItem(props: Todo) {
         setNewTitle(event.currentTarget.value);
     }
 
-    function toggleIsInEditMode() {
-        setIsInEditMode((isInEditMode) => !isInEditMode);
+    function enableEditMode() {
+        setIsInEditMode(true);
     }
 
-    function stopPropagation(event: React.MouseEvent) {
-        event.stopPropagation();
+    function cancelEditMode() {
+        setIsInEditMode(false);
+        setNewTitle(title);
     }
 
-    const patchTodoMutation = useMutation({
-        mutationFn: patchTodo,
+    const updateTodoMutation = useMutation({
+        mutationFn: updateTodo,
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
-            setIsInEditMode(false);
+            cancelEditMode();
         },
     });
 
-    async function updateTodo(event: React.FormEvent<HTMLFormElement>) {
+    async function handleUpdateTodo(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const updatedTodo: Todo = {
@@ -72,40 +65,58 @@ export default function TodoItem(props: Todo) {
             completed,
         };
 
-        await patchTodoMutation.mutateAsync(updatedTodo);
+        await updateTodoMutation.mutateAsync(updatedTodo);
     }
 
-    const toggleTodoMutation = useMutation({
+    const deleteTodoMutation = useMutation({
+        mutationFn: deleteTodo,
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+        },
+    });
+
+    async function handleDeleteTodo() {
+        await deleteTodoMutation.mutateAsync(id);
+    }
+
+    const toggleTodoCompletionMutation = useMutation({
         mutationFn: toggleTodoCompleted,
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
         },
     });
 
-    async function markTodoAsCompleted() {
-        await toggleTodoMutation.mutateAsync(id);
+    async function handleToggleTodoCompletion(): Promise<void> {
+        await toggleTodoCompletionMutation.mutateAsync(id);
     }
 
     return isInEditMode ? (
-        <RelativeContainer as="form" onSubmit={updateTodo}>
-            <Input $fullWidth ref={inputRef} value={newTitle} onInput={updateTitle} onClick={stopPropagation} onBlur={toggleIsInEditMode} />
-            <SaveEditedTodoButton $appearance="primary" $size="small" type="submit">
-                Save
-            </SaveEditedTodoButton>
+        <RelativeContainer>
+            <form onSubmit={handleUpdateTodo}>
+                <Input $fullWidth ref={inputRef} value={newTitle} onInput={updateTitle} />
+                <AbsoluteButtonContainer $direction="row" $gap={8}>
+                    <Button $appearance="secondary" $size="small" type="button" onClick={cancelEditMode}>
+                        Cancel
+                    </Button>
+                    <Button $appearance="primary" $size="small" type="submit">
+                        Save
+                    </Button>
+                </AbsoluteButtonContainer>
+            </form>
         </RelativeContainer>
     ) : (
         <RelativeContainer>
-            <ToggleEditTodoButton $appearance="secondary" $fullWidth onClick={toggleIsInEditMode}>
+            <ToggleEditTodoButton $appearance="secondary" $fullWidth onClick={enableEditMode}>
                 {title}
             </ToggleEditTodoButton>
-            <ManipulateTodoContainer $direction="row" $gap={8}>
-                <Button $appearance="secondary" $size="small">
+            <AbsoluteButtonContainer $direction="row" $gap={8}>
+                <Button $appearance="secondary" $size="small" onClick={handleDeleteTodo}>
                     Remove
                 </Button>
-                <Button $appearance="primary" $size="small" onClick={markTodoAsCompleted}>
-                    Complete
+                <Button $appearance="primary" $size="small" onClick={handleToggleTodoCompletion}>
+                    {completed ? 'Undo' : 'Complete'}
                 </Button>
-            </ManipulateTodoContainer>
+            </AbsoluteButtonContainer>
         </RelativeContainer>
     );
 }

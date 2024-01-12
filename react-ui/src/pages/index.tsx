@@ -1,14 +1,11 @@
 import { H1 } from '../components/styled/heading';
 import { Flex } from '../components/styled/flex';
-import AddTodoForm from '../components/add-todo-form';
-import { Suspense } from 'react';
-import Loading from '../components/styled/loading';
-import UncompletedTodos from '../components/uncompleted-todos';
-import CompletedTodos from '../components/completed-todos';
 import { MainContainer } from '../components/styled/container';
-import { Todo } from '../types';
+import AddTodoForm from '../components/add-todo-form';
+import TodosList from '../components/todos-list';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTodos, todosQueryKey } from '../api/todos';
+import { Todo } from '../types';
 
 export default function Todos() {
     const { data: todos, isLoading } = useQuery({
@@ -24,14 +21,10 @@ export default function Todos() {
             <H1>Todo.</H1>
             <Flex $direction="column" $gap={32}>
                 <AddTodoForm />
-                <Suspense fallback={<Loading />}>
-                    <UncompletedTodos uncompletedTodos={uncompletedTodos} />
-                </Suspense>
+                <TodosList todos={uncompletedTodos} loading={isLoading} />
             </Flex>
             <H1>Done.</H1>
-            <Suspense fallback={<Loading />}>
-                <CompletedTodos completedTodos={completedTodos} />
-            </Suspense>
+            <TodosList todos={completedTodos} loading={isLoading} />
         </MainContainer>
     );
 }
