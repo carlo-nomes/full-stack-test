@@ -1,12 +1,12 @@
 import styled from 'styled-components';
+import { focus } from './state';
 
-export const Input = styled.input`
+export const Input = styled.input<{ $fullWidth?: boolean }>`
     padding: 1rem;
-    border: 1px solid #ccc;
+    border: 2px solid #111;
     font-size: 1rem;
-    border-radius: 4px;
+    border-radius: 0.25rem;
+    width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
-    :focus {
-        outline: 1px solid #ccc;
-    }
+    ${focus}
 `;
