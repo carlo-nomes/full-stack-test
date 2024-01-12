@@ -1,23 +1,40 @@
 import { Button } from './styled/button';
-import { Form } from './styled/form';
 import { Input } from './styled/input';
+import { baseTodosUrlString } from '../utils';
+import { FormEvent, ReactElement, useRef } from 'react';
+import { Flex } from './styled/flex';
 
-export default function AddTodoForm() {
-    const sendAddTodoRequest = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const todoTitle = formData.get('title');
-        const todo = {
-            title: todoTitle,
-            completed: false,
-        };
-        console.log(todo);
-    };
+export default function AddTodoForm(): ReactElement {
+    const formRef = useRef<HTMLFormElement>(null);
+    async function sendAddTodoRequest(event: FormEvent<HTMLFormElement>): Promise<void> {
+        try {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const todoTitle = formData.get('title');
+            const todo = {
+                title: todoTitle,
+            };
+
+            await fetch(baseTodosUrlString, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(todo),
+            });
+
+            formRef.current?.reset();
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     return (
-        <Form onSubmit={sendAddTodoRequest}>
-            <Input name="title" type="text" placeholder="Describe your task" />
-            <Button type={'submit'}>Add</Button>
-        </Form>
+        <Flex $direction="row" $gap={8} as="form" ref={formRef} onSubmit={sendAddTodoRequest}>
+            <Input $fullWidth name="title" type="text" placeholder="What else needs to be done?" />
+            <Button $appearance="primary" type="submit">
+                Add
+            </Button>
+        </Flex>
     );
 }
