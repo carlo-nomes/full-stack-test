@@ -1,5 +1,5 @@
 import { Todo } from '../types';
-import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 
 export const TodosContext = createContext<{
     todos: Todo[];

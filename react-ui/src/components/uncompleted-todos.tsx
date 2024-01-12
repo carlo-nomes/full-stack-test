@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement } from 'react';
 import { Todo } from '../types';
 import TodoItem from './todo-item';
 import { List, ListItem } from './styled/list';
