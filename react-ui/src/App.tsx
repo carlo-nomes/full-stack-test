@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Todos from './pages';
-
-const queryClient = new QueryClient();
+import { queryClient } from './api/todos';
 
 const App = () => {
     return (
