@@ -43,8 +43,12 @@ export default function TodoItem({ completed, id, title }: Todo) {
         setIsInEditMode(true);
     }
 
-    function cancelEditMode() {
+    function disableEditMode() {
         setIsInEditMode(false);
+    }
+
+    function cancelEditMode() {
+        disableEditMode();
         setNewTitle(title);
     }
 
@@ -52,7 +56,7 @@ export default function TodoItem({ completed, id, title }: Todo) {
         mutationFn: updateTodo,
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
-            cancelEditMode();
+            disableEditMode();
         },
     });
 

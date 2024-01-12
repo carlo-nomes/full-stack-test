@@ -13,6 +13,10 @@ todoRouter.get('/', async (req, res) => {
 // POST /todos
 todoRouter.post('/', async (req, res) => {
     const { title } = req.body;
+    if (!title) {
+        res.status(400).json({ message: 'Missing title' });
+        return;
+    }
     const todo = { id: uuidv4(), title, completed: false };
     await putItem(todo);
     res.status(201).json(todo);

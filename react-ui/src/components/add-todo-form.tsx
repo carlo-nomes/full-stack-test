@@ -5,6 +5,7 @@ import { Flex } from './styled/flex';
 import { useMutation } from '@tanstack/react-query';
 import { addTodo, queryClient, todosQueryKey } from '../api/todos';
 import { NewTodo } from '../types';
+import toast from 'react-hot-toast';
 
 export default function AddTodoForm(): ReactElement {
     const formRef = useRef<HTMLFormElement>(null);
@@ -13,6 +14,10 @@ export default function AddTodoForm(): ReactElement {
         onSuccess: async () => {
             formRef.current?.reset();
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+        },
+        onError: (error: Error) => {
+            console.log('test');
+            toast.error('Something went wrong');
         },
     });
 

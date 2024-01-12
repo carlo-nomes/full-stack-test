@@ -6,3 +6,13 @@ export const focus = css`
         outline-offset: 2px;
     }
 `;
+
+export const danger = css`
+    background-color: #f56565;
+    color: #fff;
+`;
+
+export const success = css`
+    background-color: #48bb78;
+    color: #fff;
+`;

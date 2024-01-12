@@ -13,15 +13,15 @@ export default function Todos() {
         queryFn: getAllTodos,
     });
 
-    const uncompletedTodos = todos?.filter((todo: Todo) => !todo.completed);
-    const completedTodos = todos?.filter((todo: Todo) => todo.completed);
+    const uncompletedTodos = (todos || []).filter((todo: Todo) => !todo.completed);
+    const completedTodos = (todos || []).filter((todo: Todo) => todo.completed);
 
     return (
         <MainContainer>
             <H1>Todo.</H1>
             <Flex $direction="column" $gap={32}>
                 <AddTodoForm />
-                <TodosList todos={uncompletedTodos} loading={isLoading} />
+                <TodosList todos={uncompletedTodos} loading={isLoading} emptyMessage="Nothing to do?" />
             </Flex>
             <H1>Done.</H1>
             <TodosList todos={completedTodos} loading={isLoading} />

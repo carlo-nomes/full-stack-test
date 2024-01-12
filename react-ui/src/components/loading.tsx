@@ -1,5 +1,5 @@
-import { H2 } from './styled/heading';
+import { H3 } from './styled/heading';
 
 export default function Loading() {
-    return <H2>Loading</H2>;
+    return <H3>Loading</H3>;
 }
