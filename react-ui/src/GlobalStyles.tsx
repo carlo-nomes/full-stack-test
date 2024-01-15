@@ -367,10 +367,11 @@ export const GlobalStyles = createGlobalStyle`
         border: 0;
         font: inherit;
         vertical-align: baseline;
+        box-sizing: border-box;
+
     }
 
     /* HTML5 display-role reset for older browsers */
-
     article,
     aside,
     details,
@@ -383,13 +384,8 @@ export const GlobalStyles = createGlobalStyle`
     nav,
     section {
         display: block;
-
     }
-    
-    * {
-        box-sizing: border-box;
-    }
-
+   
     html, body {
         line-height: 1;
         font-family: 'Inter', sans-serif;
