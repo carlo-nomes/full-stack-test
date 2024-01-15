@@ -14,7 +14,7 @@ todoRouter.get('/', async (req, res) => {
 todoRouter.post('/', async (req, res) => {
     const { title } = req.body;
     if (!title) {
-        res.status(400).json({ message: 'Missing title' });
+        res.status(400).json({ message: 'Please provide a description for your todo.' });
         return;
     }
     const todo = { id: uuidv4(), title, completed: false };
@@ -27,7 +27,7 @@ todoRouter.patch('/:id', async (req, res) => {
     const { id } = req.params;
     const existingTodo = await getItem(id);
     if (!existingTodo) {
-        res.status(400).json({ message: `Todo ${id} not found` });
+        res.status(400).json({ message: `Something went wrong while editing your todo, please try again later.` });
         return;
     }
 
@@ -42,7 +42,7 @@ todoRouter.patch('/:id/toggle', async (req, res) => {
     const { id } = req.params;
     const existingTodo = await getItem(id);
     if (!existingTodo) {
-        res.status(400).json({ message: `Todo ${id} not found` });
+        res.status(400).json({ message: `Something went wrong while editing your todo, please try again later.` });
         return;
     }
 
@@ -56,7 +56,7 @@ todoRouter.delete('/:id', async (req, res) => {
     const { id } = req.params;
     const existingTodo = await getItem(id);
     if (!existingTodo) {
-        res.status(400).json({ message: `Todo ${id} not found` });
+        res.status(400).json({ message: `We could not delete your todo, please try again later.` });
         return;
     }
 

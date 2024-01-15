@@ -6,7 +6,7 @@ import { List, ListItem } from './styled/list';
 import { H3 } from './styled/heading';
 
 interface UncompletedTodosProps {
-    todos: Todo[] | undefined;
+    todos?: Todo[];
     loading: boolean;
     emptyMessage?: string;
 }

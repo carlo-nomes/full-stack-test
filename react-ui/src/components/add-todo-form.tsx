@@ -6,35 +6,33 @@ import { useMutation } from '@tanstack/react-query';
 import { addTodo, queryClient, todosQueryKey } from '../api/todos';
 import { NewTodo } from '../types';
 import toast from 'react-hot-toast';
+import { getUserFriendlyErrorMessage } from '../utils';
 
 export default function AddTodoForm(): ReactElement {
     const formRef = useRef<HTMLFormElement>(null);
+
     const addTodoMutation = useMutation({
         mutationFn: addTodo,
-        onSuccess: async () => {
+        onSuccess: async (): Promise<void> => {
             formRef.current?.reset();
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+            toast.success('Todo added');
         },
-        onError: (error: Error) => {
-            console.log('test');
-            toast.error('Something went wrong');
+        onError: (error: unknown): void => {
+            toast.error(getUserFriendlyErrorMessage(error));
         },
     });
 
     async function sendAddTodoRequest(event: FormEvent<HTMLFormElement>): Promise<void> {
-        try {
-            event.preventDefault();
+        event.preventDefault();
 
-            const formData = new FormData(event.currentTarget);
-            const todoTitle = formData.get('title') as string;
-            const newTodo: NewTodo = {
-                title: todoTitle,
-            };
+        const formData = new FormData(event.currentTarget);
+        const todoTitle = formData.get('title') as string;
+        const newTodo: NewTodo = {
+            title: todoTitle,
+        };
 
-            await addTodoMutation.mutateAsync(newTodo);
-        } catch (e) {
-            console.error(e);
-        }
+        await addTodoMutation.mutateAsync(newTodo);
     }
 
     return (

@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from './styled/button';
 import styled from 'styled-components';
 import { Flex } from './styled/flex';
-import { updateTodo, toggleTodoCompleted, queryClient, todosQueryKey, deleteTodo } from '../api/todos';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { Input } from './styled/input';
+import { updateTodo, toggleTodoCompleted, queryClient, todosQueryKey, deleteTodo } from '../api/todos';
+import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { getUserFriendlyErrorMessage } from '../utils';
 
 export const ToggleEditTodoButton = styled(Button)`
     cursor: url('/edit.svg'), pointer;
@@ -24,7 +26,7 @@ const AbsoluteButtonContainer = styled(Flex)`
     top: 0.65rem;
 `;
 
-export default function TodoItem({ completed, id, title }: Todo) {
+export default function TodoItem({ id, title, completed }: Todo) {
     const [isInEditMode, setIsInEditMode] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const [newTitle, setNewTitle] = useState(title);
@@ -39,15 +41,15 @@ export default function TodoItem({ completed, id, title }: Todo) {
         setNewTitle(event.currentTarget.value);
     }
 
-    function enableEditMode() {
+    function enableEditMode(): void {
         setIsInEditMode(true);
     }
 
-    function disableEditMode() {
+    function disableEditMode(): void {
         setIsInEditMode(false);
     }
 
-    function cancelEditMode() {
+    function cancelEditMode(): void {
         disableEditMode();
         setNewTitle(title);
     }
@@ -55,8 +57,12 @@ export default function TodoItem({ completed, id, title }: Todo) {
     const updateTodoMutation = useMutation({
         mutationFn: updateTodo,
         onSuccess: async () => {
+            toast.success('Todo successfully updated.');
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
             disableEditMode();
+        },
+        onError: (error: unknown): void => {
+            toast.error(getUserFriendlyErrorMessage(error));
         },
     });
 
@@ -75,7 +81,11 @@ export default function TodoItem({ completed, id, title }: Todo) {
     const deleteTodoMutation = useMutation({
         mutationFn: deleteTodo,
         onSuccess: async () => {
+            toast.success('Todo successfully removed.');
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+        },
+        onError: (error: unknown): void => {
+            toast.error(getUserFriendlyErrorMessage(error));
         },
     });
 
@@ -86,7 +96,11 @@ export default function TodoItem({ completed, id, title }: Todo) {
     const toggleTodoCompletionMutation = useMutation({
         mutationFn: toggleTodoCompleted,
         onSuccess: async () => {
+            toast.success('Todo successfully updated.');
             await queryClient.invalidateQueries({ queryKey: [todosQueryKey] });
+        },
+        onError: (error: unknown): void => {
+            toast.error(getUserFriendlyErrorMessage(error));
         },
     });
 
@@ -94,33 +108,35 @@ export default function TodoItem({ completed, id, title }: Todo) {
         await toggleTodoCompletionMutation.mutateAsync(id);
     }
 
-    return isInEditMode ? (
+    return (
         <RelativeContainer>
-            <form onSubmit={handleUpdateTodo}>
-                <Input $fullWidth ref={inputRef} value={newTitle} onInput={updateTitle} />
-                <AbsoluteButtonContainer $direction="row" $gap={8}>
-                    <Button $appearance="secondary" $size="small" type="button" onClick={cancelEditMode}>
-                        Cancel
-                    </Button>
-                    <Button $appearance="primary" $size="small" type="submit">
-                        Save
-                    </Button>
-                </AbsoluteButtonContainer>
-            </form>
-        </RelativeContainer>
-    ) : (
-        <RelativeContainer>
-            <ToggleEditTodoButton $appearance="secondary" $fullWidth onClick={enableEditMode}>
-                {title}
-            </ToggleEditTodoButton>
-            <AbsoluteButtonContainer $direction="row" $gap={8}>
-                <Button $appearance="secondary" $size="small" onClick={handleDeleteTodo}>
-                    Remove
-                </Button>
-                <Button $appearance="primary" $size="small" onClick={handleToggleTodoCompletion}>
-                    {completed ? 'Undo' : 'Complete'}
-                </Button>
-            </AbsoluteButtonContainer>
+            {isInEditMode ? (
+                <form onSubmit={handleUpdateTodo}>
+                    <Input $fullWidth ref={inputRef} value={newTitle} onInput={updateTitle} />
+                    <AbsoluteButtonContainer $direction="row" $gap={8}>
+                        <Button $appearance="secondary" $size="small" type="button" onClick={cancelEditMode}>
+                            Cancel
+                        </Button>
+                        <Button $appearance="primary" $size="small" type="submit">
+                            Save
+                        </Button>
+                    </AbsoluteButtonContainer>
+                </form>
+            ) : (
+                <>
+                    <ToggleEditTodoButton $appearance="secondary" $fullWidth onClick={enableEditMode}>
+                        {title}
+                    </ToggleEditTodoButton>
+                    <AbsoluteButtonContainer $direction="row" $gap={8}>
+                        <Button $appearance="secondary" $size="small" onClick={handleDeleteTodo}>
+                            Remove
+                        </Button>
+                        <Button $appearance="primary" $size="small" onClick={handleToggleTodoCompletion}>
+                            {completed ? 'Undo' : 'Complete'}
+                        </Button>
+                    </AbsoluteButtonContainer>
+                </>
+            )}
         </RelativeContainer>
     );
 }
