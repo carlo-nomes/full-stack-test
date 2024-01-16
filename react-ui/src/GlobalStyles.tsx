@@ -385,6 +385,10 @@ export const GlobalStyles = createGlobalStyle`
     section {
         display: block;
     }
+    
+    * {
+        box-sizing: border-box;
+    }
    
     html, body {
         line-height: 1;
