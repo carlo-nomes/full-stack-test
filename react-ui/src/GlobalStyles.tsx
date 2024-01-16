@@ -367,8 +367,6 @@ export const GlobalStyles = createGlobalStyle`
         border: 0;
         font: inherit;
         vertical-align: baseline;
-        box-sizing: border-box;
-
     }
 
     /* HTML5 display-role reset for older browsers */
