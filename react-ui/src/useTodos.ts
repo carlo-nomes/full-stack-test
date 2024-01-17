@@ -25,7 +25,7 @@ function useTodos() {
     async function addTodo(title: string, priority: string) {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/todos`, {
+            const response = await fetch(`${API_URL}/todos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function useTodos() {
     const deleteTodo = async (id: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/todos/${id}`, {
+            const response = await fetch(`${API_URL}/todos/${id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw response;
@@ -61,7 +61,7 @@ function useTodos() {
     const toggleTodo = async (id: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/todos/${id}/toggle`, {
+            const response = await fetch(`${API_URL}/todos/${id}/toggle`, {
                 method: 'PATCH',
             });
             if (!response.ok) throw response;
