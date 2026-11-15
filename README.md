@@ -90,25 +90,16 @@ Finish the endpoints in `src/routes/todos.ts`. The following requirements must b
 
 ## Frontend
 
-All frontend code is located in the `react-ui` folder, it is partially set up using `vite`, `react` (v19), `react-dom` and `styled-components`. The entry point for the coding exercise is `src/App.tsx`.
+All frontend code is located in the `react-ui` folder, it is partially set up using `vite`, `react` (v19), `react-dom` and `tailwindcss` (v4). The entry point for the coding exercise is `src/App.tsx`.
 
-A minimal CSS reset is set up in `src/GlobalStyles.tsx`, no additional styling is included. Styling can be kept minimal, and you can use `styled-components` (included) or any other method.
+Tailwind is imported in `src/index.css`, which also gives you its CSS reset. No other styling is included. Styling can be kept minimal, and you can use Tailwind utility classes (included) or any other method. `npm run prettier` also sorts Tailwind classes.
 
-### Simple styled component example:
+### Simple Tailwind example:
 
 ```tsx
 // src/App.tsx
-import styled from "styled-components";
-
-const Button = styled.button`
-  background: #000;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-`;
-
 const App = () => {
-  return <Button>Click me</Button>;
+  return <button className="rounded-md bg-black px-3 py-2 text-white">Click me</button>;
 };
 
 export default App;
@@ -148,7 +139,7 @@ Here are some resources that might be useful, but are not required to complete t
   - [npm](https://docs.npmjs.com/)
 - Frontend
   - [React](https://react.dev/learn)
-  - [styled-components](https://styled-components.com/docs)
+  - [Tailwind CSS](https://tailwindcss.com/docs)
 - Backend
   - [Express](https://expressjs.com/en/5x/api.html)
   - [crypto.randomUUID()](https://nodejs.org/api/crypto.html#cryptorandomuuidoptions)
