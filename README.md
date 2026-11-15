@@ -19,14 +19,11 @@ The following tools are required to get started:
 
 ## Getting started
 
-### Getting the code
+### Forking the repository
 
-- Clone this repository (`git clone https://github.com/carlo-nomes/full-stack-test.git`)
-- Create a new, empty repository on your own GitHub account (public or private), and point the clone at it:
-
-  ```bash
-  git remote set-url origin https://github.com/<your-username>/<your-repo>.git
-  ```
+- Fork this repository into your own GitHub account
+- Clone your fork (e.g. `git clone https://github.com/<your-username>/full-stack-test.git`)
+- Create a new branch with your name (e.g. `git checkout -b carlo-nomes`)
 
 ### Installing dependencies
 
@@ -41,13 +38,13 @@ The following tools are required to get started:
 ### Coding exercise
 
 - Start finishing the frontend and backend code as described below
-- Commit your changes and push them to your own repository
+- Commit your changes and push them to your forked repository
 
   > Before committing, run `npm run prettier` and `npm run typecheck` in both the `nodejs-msa` and `react-ui` folders. The dev servers do not report type errors, so `typecheck` is the way to check your typing.
 
 ### Finishing up
 
-- When you are done, send us the link to your repository. If it is private, add `carlo-nomes` as a collaborator.
+- When you are done, create a pull request to merge your forked branch into the `main` branch of the original repository
 
 ## Backend
 
