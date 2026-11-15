@@ -45,8 +45,6 @@ The following tools are required to get started:
 
   > Before committing, run `npm run prettier` and `npm run typecheck` in both the `nodejs-msa` and `react-ui` folders. The dev servers do not report type errors, so `typecheck` is the way to check your typing.
 
-- Add a short `NOTES.md` to the root of the repository with the choices you made, anything you skipped or would do differently with more time, and any questions you have. A few bullet points are enough. We use your submission and these notes as the starting point of the interview.
-
 ### Finishing up
 
 - When you are done, send us the link to your repository. If it is private, add `carlo-nomes` as a collaborator.
@@ -153,7 +151,7 @@ Here are some resources that might be useful, but are not required to complete t
 
 ## Final notes
 
-Please do not spend more than about 2 to 3 hours on this exercise. We are more interested in seeing how you approach the problem and how you structure your code. If you are not able to finish everything, that is fine: write down in `NOTES.md` what is left and how you would approach it.
+Please do not spend more than about 2 to 3 hours on this exercise. We are more interested in seeing how you approach the problem and how you structure your code. If you are not able to finish everything, that is fine. We use your submission as the starting point of the interview.
 
 Feel free to approach the exercise in any way you like. If your preferred way of doing things is not mentioned in the requirements, you may still apply it. All dependencies are already included in the project. You do not need to install any additional dependencies, but if you want to, you are free to do so.
 
