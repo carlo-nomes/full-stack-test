@@ -1,8 +1,16 @@
-import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-// Reset CSS
-export const GlobalStyles = styled.div`
+// Minimal global styles
+export const GlobalStyles = createGlobalStyle`
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
     body {
+        margin: 0;
+
         /* System default fonts */
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
             'Helvetica Neue', sans-serif;
